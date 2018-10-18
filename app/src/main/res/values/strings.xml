@@ -1,0 +1,26 @@
+<resources>
+
+    <string name="app_name">Yummy Baking Recipes</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- no internet dialog -->
+    <string name="no_internet_connection">No Internet Connection</string>
+    <string name="message_no_internet">You need to have Mobile Data or Wi-Fi to show recipes.</string>
+
+    <!-- Labels -->
+    <string name="ok">OK</string>
+    <string name="nutella_pie">Nutella Pie</string>
+    <string name="brownies">Brownies</string>
+    <string name="yellow_cake">Yellow Cake</string>
+    <string name="cheescake">Cheesecake</string>
+
+    <string name="ingredients">Ingredients</string>
+    <string name="steps">Steps</string>
+
+    <string name="str_gradient_value">%1$d %2$s %3$s</string>
+
+    <string name="previous">Previous</string>
+    <string name="next">Next</string>
+    <string name="watch">Watch</string>
+
+</resources>
