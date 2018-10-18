@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -37,6 +38,9 @@ public class StepVideoFragment extends BaseFragment {
 
     private static final String TAG = StepVideoFragment.class.getName();
 
+    private static final String CURRENT_POSITION = "current_position";
+    private static final String PLAY_STATE = "play_state";
+
     @BindView(R.id.exoplayer_view)
     SimpleExoPlayerView exoplayer_view;
 
@@ -65,6 +69,9 @@ public class StepVideoFragment extends BaseFragment {
 
     private boolean isTablet;
     private boolean isLandscape;
+    private long previousPosition;
+    private boolean playState;
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -79,6 +86,17 @@ public class StepVideoFragment extends BaseFragment {
                     View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
                             View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         }
+
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey(CURRENT_POSITION)) {
+                previousPosition = savedInstanceState.getLong(CURRENT_POSITION);
+            }
+
+            if (savedInstanceState.containsKey(PLAY_STATE)) {
+                playState = savedInstanceState.getBoolean(PLAY_STATE);
+            }
+        }
+
     }
 
     @Override
@@ -139,11 +157,17 @@ public class StepVideoFragment extends BaseFragment {
     }
 
     private void initControls() {
-        if (isTablet) {
-            buttonPanel.setVisibility(View.GONE);
+        if (isTablet && isLandscape) {
+            buttonPanel.setVisibility(View.INVISIBLE);
+            step_short_desc_text_view.setVisibility(View.VISIBLE);
+            step_desc_text_view.setVisibility(View.VISIBLE);
         } else if (isPhoneAndLandscape()) {
             buttonPanel.setVisibility(View.GONE);
             step_short_desc_text_view.setVisibility(View.GONE);
+            step_desc_text_view.setVisibility(View.GONE);
+        } else {
+            step_short_desc_text_view.setVisibility(View.VISIBLE);
+            step_desc_text_view.setVisibility(View.VISIBLE);
         }
         if (mStepList != null) {
             setButtonVisibility();
@@ -197,6 +221,11 @@ public class StepVideoFragment extends BaseFragment {
             MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(
                     getContext(), userAgent), new DefaultExtractorsFactory(), null, null);
             mExoPlayer.prepare(mediaSource);
+
+            // reset previous values
+            mExoPlayer.seekTo(previousPosition);
+            mExoPlayer.setPlayWhenReady(playState);
+
         }
     }
 
@@ -219,10 +248,20 @@ public class StepVideoFragment extends BaseFragment {
      */
     private void releasePlayer() {
         if (mExoPlayer != null) {
+            previousPosition = mExoPlayer.getCurrentPosition();
+            playState = mExoPlayer.getPlayWhenReady();
+
             mExoPlayer.stop();
             mExoPlayer.release();
             mExoPlayer = null;
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putLong(CURRENT_POSITION, previousPosition);
+        outState.putBoolean(PLAY_STATE, playState);
     }
 
     private boolean isPhoneAndLandscape() {

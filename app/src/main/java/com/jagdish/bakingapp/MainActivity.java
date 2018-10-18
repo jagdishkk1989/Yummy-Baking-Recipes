@@ -106,8 +106,6 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onChanged(@Nullable ArrayList<Recipe> recipes) {
                             if (recipes != null && recipes.size() > 0) {
-                                // mIdlingResource.isIdleNow();
-
                                 if (mIdlingResource != null) {
                                     mIdlingResource.setIdleState(true);
                                 }

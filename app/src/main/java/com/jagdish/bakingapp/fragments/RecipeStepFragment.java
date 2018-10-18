@@ -38,11 +38,12 @@ public class RecipeStepFragment extends BaseFragment {
     private int currentStepPos = 0;
     private boolean isVideoPlaying = false;
     private boolean isTablet = false;
+    private boolean isLandscape = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        isLandscape = getResources().getBoolean(R.bool.is_landscape);
         String screenType = getResources().getString(R.string.screen_type);
         if (screenType.equalsIgnoreCase("tablet")) {
             isTablet = true;
@@ -87,6 +88,8 @@ public class RecipeStepFragment extends BaseFragment {
             Log.d(TAG, "jk fragment current step pos:" + currentStepPos);
             Log.d(TAG, "jk fragment  is video playing:" + isVideoPlaying);
             vertical_stepper_view.setCurrentStep(currentStepPos);
+
+
             if (isVideoPlaying) {
                 stepNavigatorCallBack.onClickWatch();
             }
@@ -107,6 +110,9 @@ public class RecipeStepFragment extends BaseFragment {
             currentStepPos = current + 1;
             mParentActivity.setCurrentStepPos(currentStepPos);
             vertical_stepper_view.setCurrentStep(current + 1);
+            if (isTablet && isLandscape) {
+                goToVideoFragment(current + 1);
+            }
         }
 
         @Override
@@ -125,9 +131,9 @@ public class RecipeStepFragment extends BaseFragment {
         bundle.putInt("currentPos", position);
         stepVideoFragment.setArguments(bundle);
 
-        if (isTablet)
+        if (isTablet && isLandscape)
             BaseFragment.replaceFragment(mParentActivity, R.id.containerVideo, stepVideoFragment, "StepVideoFragment");
-        else {
+        else if (isTablet) {
             BaseFragment.replaceFragment(mParentActivity, R.id.containerStep, stepVideoFragment, "StepVideoFragment");
         }
     }

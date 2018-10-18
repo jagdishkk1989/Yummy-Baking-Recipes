@@ -7,11 +7,17 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 
 import com.jagdish.bakingapp.data.Recipe;
 import com.jagdish.bakingapp.fragments.BaseFragment;
 import com.jagdish.bakingapp.fragments.RecipeStepFragment;
 import com.jagdish.bakingapp.fragments.StepVideoFragment;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class RecipeDetailActivity extends AppCompatActivity {
 
@@ -27,10 +33,15 @@ public class RecipeDetailActivity extends AppCompatActivity {
     private int currentStepPos = 0;
     private boolean isVideoPlaying = false;
 
+    @BindView(R.id.containerVideo)
+    FrameLayout containerVideo;
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_detail);
+        ButterKnife.bind(this);
 
         if (getIntent().hasExtra("recipe")) {
             mRecipe = getIntent().getExtras().getParcelable("recipe");
@@ -66,8 +77,11 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
         addStepFragment();
 
-        if (isTablet) {
+        if (isTablet && isLandscape) {
+            containerVideo.setVisibility(View.VISIBLE);
             addVideoFragment();
+        } else {
+            containerVideo.setVisibility(View.GONE);
         }
     }
 
@@ -105,8 +119,8 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
     private void goBack() {
 
-        if (isTablet) {
-            getSupportFragmentManager().popBackStack();
+        if (isTablet && isLandscape) {
+            finish();
         } else {
             RecipeStepFragment recipeStepFragment = (RecipeStepFragment) getSupportFragmentManager().findFragmentByTag("RecipeStepFragment");
             StepVideoFragment stepVideoFragment = (StepVideoFragment) getSupportFragmentManager().findFragmentByTag("StepVideoFragment");
