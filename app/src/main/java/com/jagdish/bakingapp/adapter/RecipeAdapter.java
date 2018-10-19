@@ -8,13 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.jagdish.bakingapp.R;
 import com.jagdish.bakingapp.RecipeDetailActivity;
 import com.jagdish.bakingapp.data.Recipe;
 import com.jagdish.bakingapp.widget.RecipeWidgetUpdateService;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -22,8 +20,8 @@ import java.util.List;
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeAdapterViewHolder> {
 
     private static final String TAG = RecipeAdapter.class.getName();
-    Context mContext;
-    List<Recipe> recipeList;
+    private Context mContext;
+    private List<Recipe> recipeList;
 
     public class RecipeAdapterViewHolder extends RecyclerView.ViewHolder {
         public final ImageView mRecipeImage;
@@ -61,22 +59,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeAdap
 
         if (recipe.getName() != null) {
             recipeAdapterViewHolder.mRecipeName.setText(recipe.getName());
-
-//            if (recipe.getName().equalsIgnoreCase(mContext.getResources().getString(R.string.nutella_pie))) {
-//                Picasso.with(mContext).load(R.drawable.nutella).placeholder(R.drawable.ic_thumbnails_loading).error(mContext.getResources().getDrawable(R.drawable.ic_thumbnails_no_image)).into(recipeAdapterViewHolder.mRecipeImage);
-//            } else if (recipe.getName().equalsIgnoreCase(mContext.getResources().getString(R.string.brownies))) {
-////                recipeAdapterViewHolder.mRecipeImage.setImageResource(R.drawable.brownie1);
-//                Picasso.with(mContext).load(R.drawable.brownie1).placeholder(R.drawable.ic_thumbnails_loading).error(mContext.getResources().getDrawable(R.drawable.ic_thumbnails_no_image)).into(recipeAdapterViewHolder.mRecipeImage);
-//
-//            } else if (recipe.getName().equalsIgnoreCase(mContext.getResources().getString(R.string.yellow_cake))) {
-////                recipeAdapterViewHolder.mRecipeImage.setImageResource(R.drawable.yellow_cake);
-//                Picasso.with(mContext).load(R.drawable.yellow_cake2).placeholder(R.drawable.ic_thumbnails_loading).error(mContext.getResources().getDrawable(R.drawable.ic_thumbnails_no_image)).into(recipeAdapterViewHolder.mRecipeImage);
-//
-//            } else if (recipe.getName().equalsIgnoreCase(mContext.getResources().getString(R.string.cheescake))) {
-////                recipeAdapterViewHolder.mRecipeImage.setImageResource(R.drawable.cheese_cake);
-//                Picasso.with(mContext).load(R.drawable.cheese_cake).placeholder(R.drawable.ic_thumbnails_loading).error(mContext.getResources().getDrawable(R.drawable.ic_thumbnails_no_image)).into(recipeAdapterViewHolder.mRecipeImage);
-//            }
-
         }
 
         recipeAdapterViewHolder.itemView.setOnClickListener(new View.OnClickListener() {

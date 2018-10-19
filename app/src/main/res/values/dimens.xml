@@ -1,11 +1,6 @@
 <resources>
     <dimen name="margin_label_top">7dp</dimen>
-    <dimen name="margin_recycler_view">10dp</dimen>
     <dimen name="padding_parent_views">15dp</dimen>
-    <dimen name="margin_left_detail_views">15dp</dimen>
-    <dimen name="margin_label_left">5dp</dimen>
-    <dimen name="video_thumbnails_width">180dp</dimen>
-    <dimen name="video_thumbnails_height">120dp</dimen>
     <dimen name="list_item_margin">5dp</dimen>
     <dimen name="label_margin_common">5dp</dimen>
     <dimen name="padding_common">10dp</dimen>

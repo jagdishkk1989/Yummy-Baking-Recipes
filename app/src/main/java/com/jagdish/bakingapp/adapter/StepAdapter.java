@@ -19,8 +19,8 @@ import moe.feng.common.stepperview.VerticalStepperItemView;
 
 public class StepAdapter implements IStepperAdapter {
 
-    ArrayList<Step> stepList;
-    StepNavigatorCallBack stepNavigatorCallBack;
+    private ArrayList<Step> stepList;
+    private StepNavigatorCallBack stepNavigatorCallBack;
 
     public StepAdapter(ArrayList<Step> stepList, StepNavigatorCallBack stepNavigatorCallBack) {
         this.stepList = stepList;

@@ -14,7 +14,8 @@
             android:layout_width="match_parent"
             android:layout_height="260dp"
             android:padding="@dimen/list_item_margin"
-            android:src="@drawable/brownie1"></ImageView>
+            android:src="@drawable/recipe_sample_image"
+            android:contentDescription="@string/recipe_sample_image"></ImageView>
 
         <TextView
             android:id="@+id/recipe_name"

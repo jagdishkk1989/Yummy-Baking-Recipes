@@ -4,9 +4,9 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,9 +37,9 @@ import butterknife.ButterKnife;
 public class StepVideoFragment extends BaseFragment {
 
     private static final String TAG = StepVideoFragment.class.getName();
+    public static final String BUNDLE_VIDEO_POSITION = "videoPosition";
+    public static final String BUNDLE_PLAY_STATE = "play_state";
 
-    private static final String CURRENT_POSITION = "current_position";
-    private static final String PLAY_STATE = "play_state";
 
     @BindView(R.id.exoplayer_view)
     SimpleExoPlayerView exoplayer_view;
@@ -58,6 +58,13 @@ public class StepVideoFragment extends BaseFragment {
 
     @BindView(R.id.buttonPanel)
     View buttonPanel;
+
+    @BindView(R.id.player_container)
+    View player_container;
+
+    @BindView(R.id.no_video_container)
+    View no_video_container;
+
 
     SimpleExoPlayer mExoPlayer;
     ArrayList<Step> mStepList = null;
@@ -88,15 +95,14 @@ public class StepVideoFragment extends BaseFragment {
         }
 
         if (savedInstanceState != null) {
-            if (savedInstanceState.containsKey(CURRENT_POSITION)) {
-                previousPosition = savedInstanceState.getLong(CURRENT_POSITION);
+            if (savedInstanceState.containsKey(BUNDLE_VIDEO_POSITION)) {
+                previousPosition = savedInstanceState.getLong(BUNDLE_VIDEO_POSITION);
             }
 
-            if (savedInstanceState.containsKey(PLAY_STATE)) {
-                playState = savedInstanceState.getBoolean(PLAY_STATE);
+            if (savedInstanceState.containsKey(BUNDLE_PLAY_STATE)) {
+                playState = savedInstanceState.getBoolean(BUNDLE_PLAY_STATE);
             }
         }
-
     }
 
     @Override
@@ -200,8 +206,20 @@ public class StepVideoFragment extends BaseFragment {
             mStep = mStepList.get(currentPos);
 
             if (mStep.getVideoURL() != null && !mStep.getVideoURL().equals("")) {
+
+                // visible player container
+                no_video_container.setVisibility(View.GONE);
+                player_container.setVisibility(View.VISIBLE);
+
                 initializePlayer(Uri.parse(mStep.getVideoURL()));
+            } else {
+
+                // hide play container if no video
+                player_container.setVisibility(View.GONE);
+                no_video_container.setVisibility(View.VISIBLE);
             }
+
+
             if (mStep.getShortDescription() != null) {
                 step_short_desc_text_view.setText(mStep.getShortDescription());
             }
@@ -251,17 +269,15 @@ public class StepVideoFragment extends BaseFragment {
             previousPosition = mExoPlayer.getCurrentPosition();
             playState = mExoPlayer.getPlayWhenReady();
 
+            // set values to save in savedInstance
+            mParentActivity.setPreviousPosition(previousPosition);
+            mParentActivity.setPlayState(playState);
+
+            // stop and release player
             mExoPlayer.stop();
             mExoPlayer.release();
             mExoPlayer = null;
         }
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putLong(CURRENT_POSITION, previousPosition);
-        outState.putBoolean(PLAY_STATE, playState);
     }
 
     private boolean isPhoneAndLandscape() {

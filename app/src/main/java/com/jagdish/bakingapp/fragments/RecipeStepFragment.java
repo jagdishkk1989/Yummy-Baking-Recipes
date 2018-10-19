@@ -3,7 +3,6 @@ package com.jagdish.bakingapp.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,12 +22,10 @@ public class RecipeStepFragment extends BaseFragment {
 
     private static final String TAG = RecipeStepFragment.class.getName();
 
-
     private View rootView;
 
     @BindView(R.id.tvIngredients)
     TextView tvIngredients;
-
 
     @BindView(R.id.vertical_stepper_view)
     VerticalStepperView vertical_stepper_view;
@@ -85,10 +82,8 @@ public class RecipeStepFragment extends BaseFragment {
 
             setStepsAdapter();
 
-            Log.d(TAG, "jk fragment current step pos:" + currentStepPos);
-            Log.d(TAG, "jk fragment  is video playing:" + isVideoPlaying);
+            // active previous step
             vertical_stepper_view.setCurrentStep(currentStepPos);
-
 
             if (isVideoPlaying) {
                 stepNavigatorCallBack.onClickWatch();
@@ -133,7 +128,7 @@ public class RecipeStepFragment extends BaseFragment {
 
         if (isTablet && isLandscape)
             BaseFragment.replaceFragment(mParentActivity, R.id.containerVideo, stepVideoFragment, "StepVideoFragment");
-        else if (isTablet) {
+        else {
             BaseFragment.replaceFragment(mParentActivity, R.id.containerStep, stepVideoFragment, "StepVideoFragment");
         }
     }

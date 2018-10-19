@@ -5,11 +5,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ProgressBar;
 
 import com.jagdish.bakingapp.data.Recipe;
 import com.jagdish.bakingapp.fragments.BaseFragment;
@@ -22,9 +20,9 @@ import butterknife.ButterKnife;
 public class RecipeDetailActivity extends AppCompatActivity {
 
     private static final String TAG = RecipeDetailActivity.class.getName();
+
     private static final String BUNDLE_STEP_POS = "currentStepPos";
     private static final String BUNDLE_IS_VIDEO_PLAYING = "isVideoPlaying";
-    private static final String BUNDLE_VIDEO_POSITION = "videoPosition";
 
     Recipe mRecipe;
 
@@ -32,6 +30,10 @@ public class RecipeDetailActivity extends AppCompatActivity {
     private boolean isLandscape = false;
     private int currentStepPos = 0;
     private boolean isVideoPlaying = false;
+
+    // video state variable
+    private long previousPosition;
+    private boolean playState;
 
     @BindView(R.id.containerVideo)
     FrameLayout containerVideo;
@@ -62,18 +64,12 @@ public class RecipeDetailActivity extends AppCompatActivity {
             }
         }
 
-
         String screenType = getResources().getString(R.string.screen_type);
         if (screenType.equalsIgnoreCase("tablet")) {
             isTablet = true;
         }
 
         isLandscape = getResources().getBoolean(R.bool.is_landscape);
-
-        if (isLandscape)
-            Log.d(TAG, "jk landscape");
-        else
-            Log.d(TAG, "jk portrait");
 
         addStepFragment();
 
@@ -91,7 +87,8 @@ public class RecipeDetailActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         outState.putInt(BUNDLE_STEP_POS, currentStepPos);
         outState.putBoolean(BUNDLE_IS_VIDEO_PLAYING, isVideoPlaying);
-        Log.d(TAG, "jk Saving current step pos:" + currentStepPos + ", isVideo Playing: " + isVideoPlaying);
+        outState.putLong(StepVideoFragment.BUNDLE_VIDEO_POSITION, previousPosition);
+        outState.putBoolean(StepVideoFragment.BUNDLE_PLAY_STATE, playState);
     }
 
     public void setCurrentStepPos(int currentStepPos) {
@@ -100,7 +97,14 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
     public void setIsVideoPlaying(boolean isVideoPlaying) {
         this.isVideoPlaying = isVideoPlaying;
-        Log.d(TAG, "jk set is video playing:" + isVideoPlaying);
+    }
+
+    public void setPreviousPosition(long previousPosition) {
+        this.previousPosition = previousPosition;
+    }
+
+    public void setPlayState(boolean playState) {
+        this.playState = playState;
     }
 
     @Override

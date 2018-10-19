@@ -10,21 +10,11 @@ import android.widget.TextView;
 
 public class BaseFragment extends Fragment {
 
-    public static void addFragment(Context context, int containerid, Fragment fragment, String tag, String stackName) {
-        FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(containerid, fragment, tag);
-        fragmentTransaction.addToBackStack(stackName);
-        fragmentTransaction.commit();
-    }
-
     public static void replaceFragment(Context context, int containerid, Fragment fragment, String tag) {
         FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(containerid, fragment, tag);
         fragmentTransaction.commit();
     }
-
-
 }
 
