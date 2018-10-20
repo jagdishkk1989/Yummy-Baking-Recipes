@@ -87,8 +87,6 @@ public class RecipeDetailActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         outState.putInt(BUNDLE_STEP_POS, currentStepPos);
         outState.putBoolean(BUNDLE_IS_VIDEO_PLAYING, isVideoPlaying);
-        outState.putLong(StepVideoFragment.BUNDLE_VIDEO_POSITION, previousPosition);
-        outState.putBoolean(StepVideoFragment.BUNDLE_PLAY_STATE, playState);
     }
 
     public void setCurrentStepPos(int currentStepPos) {

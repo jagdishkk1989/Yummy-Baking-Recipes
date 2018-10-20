@@ -8,12 +8,11 @@
 
     <!-- Labels -->
     <string name="ok">OK</string>
-
     <string name="ingredients">Ingredients</string>
     <string name="steps">Steps</string>
     <string name="recipe_sample_image">Recipe Sample Image</string>
     <string name="previous">Previous</string>
     <string name="next">Next</string>
     <string name="watch">Watch</string>
-    <string name="video_not_available">Video not available </string>
+    <string name="video_not_available">Video not available for this step</string>
 </resources>

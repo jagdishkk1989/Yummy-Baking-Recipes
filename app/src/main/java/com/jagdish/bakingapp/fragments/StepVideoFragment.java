@@ -37,8 +37,6 @@ import butterknife.ButterKnife;
 public class StepVideoFragment extends BaseFragment {
 
     private static final String TAG = StepVideoFragment.class.getName();
-    public static final String BUNDLE_VIDEO_POSITION = "videoPosition";
-    public static final String BUNDLE_PLAY_STATE = "play_state";
 
 
     @BindView(R.id.exoplayer_view)
@@ -76,8 +74,6 @@ public class StepVideoFragment extends BaseFragment {
 
     private boolean isTablet;
     private boolean isLandscape;
-    private long previousPosition;
-    private boolean playState;
 
 
     @Override
@@ -94,15 +90,6 @@ public class StepVideoFragment extends BaseFragment {
                             View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         }
 
-        if (savedInstanceState != null) {
-            if (savedInstanceState.containsKey(BUNDLE_VIDEO_POSITION)) {
-                previousPosition = savedInstanceState.getLong(BUNDLE_VIDEO_POSITION);
-            }
-
-            if (savedInstanceState.containsKey(BUNDLE_PLAY_STATE)) {
-                playState = savedInstanceState.getBoolean(BUNDLE_PLAY_STATE);
-            }
-        }
     }
 
     @Override
@@ -239,11 +226,7 @@ public class StepVideoFragment extends BaseFragment {
             MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(
                     getContext(), userAgent), new DefaultExtractorsFactory(), null, null);
             mExoPlayer.prepare(mediaSource);
-
-            // reset previous values
-            mExoPlayer.seekTo(previousPosition);
-            mExoPlayer.setPlayWhenReady(playState);
-
+            mExoPlayer.setPlayWhenReady(true);
         }
     }
 
@@ -266,12 +249,6 @@ public class StepVideoFragment extends BaseFragment {
      */
     private void releasePlayer() {
         if (mExoPlayer != null) {
-            previousPosition = mExoPlayer.getCurrentPosition();
-            playState = mExoPlayer.getPlayWhenReady();
-
-            // set values to save in savedInstance
-            mParentActivity.setPreviousPosition(previousPosition);
-            mParentActivity.setPlayState(playState);
 
             // stop and release player
             mExoPlayer.stop();

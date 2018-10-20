@@ -76,13 +76,6 @@ public class StepAdapter implements IStepperAdapter {
             }
         });
 
-
-//        binding.setWatchCallback(activity);
-//        binding.setNextCallback(fragment);
-//        binding.setStep(steps.get(i));
-//        binding.setTotalStepCount(steps.size());
-//
-//        return binding.getRoot();
         return view;
     }
 

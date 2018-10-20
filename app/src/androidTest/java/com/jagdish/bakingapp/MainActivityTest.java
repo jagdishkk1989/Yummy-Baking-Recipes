@@ -49,11 +49,6 @@ public class MainActivityTest {
 
         matchToolbarTitle("Nutella Pie").check(matches(isDisplayed()));
 
-//        onView(withId(R.id.steps_recyclerView)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-//
-//        onView(withId(R.id.step_short_desc_text_view)).check(matches(isDisplayed()));
-//        onView(withId(R.id.step_desc_text_view)).check(matches(isDisplayed()));
-
     }
 
 
