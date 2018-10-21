@@ -14,16 +14,15 @@ import com.jagdish.bakingapp.data.Recipe;
 
 public class RecipeIngredientProvider extends AppWidgetProvider {
 
-    private static String mIngredients;
     private static String mRecipeName;
     private static Recipe mRecipe;
 
     public static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                       int[] appWidgetId, String ingredients, String recipeName,
+                                       int[] appWidgetId, String recipeName,
                                        Recipe recipe) {
 
         mRecipeName = recipeName;
-        mIngredients = ingredients;
+
         mRecipe = recipe;
         Intent intent = new Intent(context, RecipeDetailActivity.class);
         intent.putExtra("recipe", recipe);
@@ -33,7 +32,12 @@ public class RecipeIngredientProvider extends AppWidgetProvider {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipe_ingredient_provider);
 
         views.setTextViewText(R.id.widget_recipe_name, recipeName);
-        views.setTextViewText(R.id.widget_ingredients, ingredients);
+      //  views.setTextViewText(R.id.widget_ingredients, ingredients);
+
+        views.setRemoteAdapter(R.id.widget_listview_ingredients,
+                RecipeRemoteViewsService.getIntent(context));
+
+        views.setPendingIntentTemplate(R.id.widget_listview_ingredients, pendingIntent);
 
         views.setOnClickPendingIntent(R.id.recipe_layout, pendingIntent);
         // Instruct the widget manager to update the widget
@@ -44,7 +48,7 @@ public class RecipeIngredientProvider extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
         for (int appWidgetId : appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, new int[]{appWidgetId}, mIngredients, mRecipeName, mRecipe);
+            updateAppWidget(context, appWidgetManager, new int[]{appWidgetId}, mRecipeName, mRecipe);
         }
     }
 

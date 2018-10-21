@@ -15,11 +15,13 @@
         android:textStyle="bold"
         tools:text="" />
 
-    <TextView
-        android:id="@+id/widget_ingredients"
+    <ListView
+        android:layout_marginTop="10dp"
+        android:id="@+id/widget_listview_ingredients"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/white"
-        tools:text="" />
+        android:layout_height="match_parent"
+        android:divider="@android:color/darker_gray"
+        android:dividerHeight="1dp"
+        tools:listitem="@layout/widget_ingradient_list_item" />
 
 </LinearLayout>

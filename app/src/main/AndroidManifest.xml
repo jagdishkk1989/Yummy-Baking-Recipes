@@ -20,7 +20,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RecipeDetailActivity" />
+        <activity
+            android:name=".RecipeDetailActivity"
+            android:supportsPictureInPicture="true" />
 
 
         <receiver android:name=".widget.RecipeIngredientProvider">
@@ -34,6 +36,10 @@
         </receiver>
 
         <service android:name=".widget.RecipeWidgetUpdateService" />
+
+        <service
+            android:name=".widget.RecipeRemoteViewsService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
 
     </application>
 

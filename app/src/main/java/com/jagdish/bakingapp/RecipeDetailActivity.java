@@ -1,10 +1,12 @@
 package com.jagdish.bakingapp;
 
+import android.app.PictureInPictureParams;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -23,6 +25,8 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
     private static final String BUNDLE_STEP_POS = "currentStepPos";
     private static final String BUNDLE_IS_VIDEO_PLAYING = "isVideoPlaying";
+    private static final String BUNDLE_PREVIOUS_POSITION = "previousPos";
+    private static final String BUNDLE_PLAYER_STATE = "playerState";
 
     Recipe mRecipe;
 
@@ -45,6 +49,11 @@ public class RecipeDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_recipe_detail);
         ButterKnife.bind(this);
 
+//        PictureInPictureParams params = new PictureInPictureParams.Builder()
+//                        // Set actions or aspect ratio.
+//                        .build();
+//        enterPictureInPictureMode(params);
+
         if (getIntent().hasExtra("recipe")) {
             mRecipe = getIntent().getExtras().getParcelable("recipe");
         }
@@ -52,6 +61,9 @@ public class RecipeDetailActivity extends AppCompatActivity {
         if (savedInstanceState != null) {
             currentStepPos = savedInstanceState.getInt(BUNDLE_STEP_POS);
             isVideoPlaying = savedInstanceState.getBoolean(BUNDLE_IS_VIDEO_PLAYING);
+            previousPosition = savedInstanceState.getLong(BUNDLE_PREVIOUS_POSITION);
+            isVideoPlaying = savedInstanceState.getBoolean(BUNDLE_IS_VIDEO_PLAYING);
+            Log.d(TAG,"jk restore player pos: "+previousPosition+", state: "+playState);
         }
 
 
@@ -87,6 +99,10 @@ public class RecipeDetailActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         outState.putInt(BUNDLE_STEP_POS, currentStepPos);
         outState.putBoolean(BUNDLE_IS_VIDEO_PLAYING, isVideoPlaying);
+        outState.putLong(BUNDLE_PREVIOUS_POSITION, previousPosition);
+        outState.putBoolean(BUNDLE_PLAYER_STATE, playState);
+
+        Log.d(TAG,"jk saving player pos: "+previousPosition+", state: "+playState);
     }
 
     public void setCurrentStepPos(int currentStepPos) {
@@ -103,6 +119,14 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
     public void setPlayState(boolean playState) {
         this.playState = playState;
+    }
+
+    public long getPreviousPosition() {
+        return previousPosition;
+    }
+
+    public boolean getPlayState() {
+        return playState;
     }
 
     @Override

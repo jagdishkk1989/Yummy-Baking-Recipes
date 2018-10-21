@@ -1,13 +1,18 @@
 package com.jagdish.bakingapp.data;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-
+@Entity
 public class Ingredient implements Parcelable {
+
+    @PrimaryKey(autoGenerate = true)
+    private int roomId;
 
     @SerializedName("quantity")
     @Expose
@@ -20,6 +25,8 @@ public class Ingredient implements Parcelable {
     @SerializedName("ingredient")
     @Expose
     private String name;
+
+    private int recipeId;
 
     public Ingredient() {
     }
@@ -66,6 +73,22 @@ public class Ingredient implements Parcelable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(int roomId) {
+        this.roomId = roomId;
+    }
+
+    public int getRecipeId() {
+        return recipeId;
+    }
+
+    public void setRecipeId(int recipeId) {
+        this.recipeId = recipeId;
     }
 
     @Override

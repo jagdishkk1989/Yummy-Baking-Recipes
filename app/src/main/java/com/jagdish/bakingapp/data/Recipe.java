@@ -1,5 +1,8 @@
 package com.jagdish.bakingapp.data;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -9,23 +12,24 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
-
+@Entity
 public class Recipe implements Parcelable {
 
-    private int rowId;
-
+    @PrimaryKey
     @SerializedName("id")
     @Expose
-    private int recipeId;
+    private int id;
 
     @SerializedName("name")
     @Expose
     private String name;
 
+    @Ignore
     @SerializedName("ingredients")
     @Expose
     private List<Ingredient> ingredients = null;
 
+    @Ignore
     @SerializedName("steps")
     @Expose
     private ArrayList<Step> steps = null;
@@ -43,7 +47,7 @@ public class Recipe implements Parcelable {
     }
 
     protected Recipe(Parcel in) {
-        recipeId = in.readInt();
+        id = in.readInt();
         name = in.readString();
         ingredients = in.createTypedArrayList(Ingredient.CREATOR);
         steps = in.createTypedArrayList(Step.CREATOR);
@@ -51,20 +55,12 @@ public class Recipe implements Parcelable {
         image = in.readString();
     }
 
-    public int getRowId() {
-        return rowId;
+    public int getId() {
+        return id;
     }
 
-    public void setRowId(int rowId) {
-        this.rowId = rowId;
-    }
-
-    public int getRecipeId() {
-        return recipeId;
-    }
-
-    public void setRecipeId(int recipeId) {
-        this.recipeId = recipeId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -114,7 +110,7 @@ public class Recipe implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(recipeId);
+        dest.writeInt(id);
         dest.writeString(name);
         dest.writeTypedList(ingredients);
         dest.writeTypedList(steps);

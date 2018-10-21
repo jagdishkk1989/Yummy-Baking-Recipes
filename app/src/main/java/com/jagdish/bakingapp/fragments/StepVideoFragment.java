@@ -75,6 +75,9 @@ public class StepVideoFragment extends BaseFragment {
     private boolean isTablet;
     private boolean isLandscape;
 
+    // video state variable
+    private long previousPosition;
+    private boolean playState;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -88,6 +91,7 @@ public class StepVideoFragment extends BaseFragment {
             getActivity().getWindow().getDecorView().setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
                             View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+
         }
 
     }
@@ -103,6 +107,9 @@ public class StepVideoFragment extends BaseFragment {
                 mStepList = bundle.getParcelableArrayList("stepList");
                 currentPos = bundle.getInt("currentPos");
             }
+            previousPosition = mParentActivity.getPreviousPosition();
+            playState = mParentActivity.getPlayState();
+
         }
     }
 
@@ -189,23 +196,8 @@ public class StepVideoFragment extends BaseFragment {
         if (mStepList != null) {
 
             setButtonVisibility();
-
             mStep = mStepList.get(currentPos);
-
-            if (mStep.getVideoURL() != null && !mStep.getVideoURL().equals("")) {
-
-                // visible player container
-                no_video_container.setVisibility(View.GONE);
-                player_container.setVisibility(View.VISIBLE);
-
-                initializePlayer(Uri.parse(mStep.getVideoURL()));
-            } else {
-
-                // hide play container if no video
-                player_container.setVisibility(View.GONE);
-                no_video_container.setVisibility(View.VISIBLE);
-            }
-
+            setPlayer();
 
             if (mStep.getShortDescription() != null) {
                 step_short_desc_text_view.setText(mStep.getShortDescription());
@@ -215,6 +207,25 @@ public class StepVideoFragment extends BaseFragment {
             }
         }
     }
+
+    private void setPlayer() {
+
+        if (mStep.getVideoURL() != null && !mStep.getVideoURL().equals("")) {
+
+            // visible player container
+            no_video_container.setVisibility(View.GONE);
+            player_container.setVisibility(View.VISIBLE);
+
+            initializePlayer(Uri.parse(mStep.getVideoURL()));
+        } else {
+
+            // hide play container if no video
+            player_container.setVisibility(View.GONE);
+            no_video_container.setVisibility(View.VISIBLE);
+        }
+
+    }
+
 
     private void initializePlayer(Uri mediaUri) {
         if (mExoPlayer == null) {
@@ -226,20 +237,27 @@ public class StepVideoFragment extends BaseFragment {
             MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(
                     getContext(), userAgent), new DefaultExtractorsFactory(), null, null);
             mExoPlayer.prepare(mediaSource);
-            mExoPlayer.setPlayWhenReady(true);
+
+            // restore previous values
+            mExoPlayer.seekTo(previousPosition);
+            mExoPlayer.setPlayWhenReady(playState);
         }
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        releasePlayer();
+    public void onPause() {
+        super.onPause();
+        if (Util.SDK_INT <= 23) {
+            // release player
+            releasePlayer();
+        }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if (mExoPlayer != null) {
+        if (Util.SDK_INT > 23) {
+            // release player
             releasePlayer();
         }
     }
@@ -249,6 +267,11 @@ public class StepVideoFragment extends BaseFragment {
      */
     private void releasePlayer() {
         if (mExoPlayer != null) {
+
+            previousPosition = mExoPlayer.getCurrentPosition();
+            playState = mExoPlayer.getPlayWhenReady();
+            mParentActivity.setPreviousPosition(previousPosition);
+            mParentActivity.setPlayState(playState);
 
             // stop and release player
             mExoPlayer.stop();

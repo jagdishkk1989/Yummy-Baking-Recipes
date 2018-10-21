@@ -12,6 +12,8 @@ import android.widget.TextView;
 import com.jagdish.bakingapp.R;
 import com.jagdish.bakingapp.RecipeDetailActivity;
 import com.jagdish.bakingapp.data.Recipe;
+import com.jagdish.bakingapp.db.AppDatabase;
+import com.jagdish.bakingapp.utility.SessionManager;
 import com.jagdish.bakingapp.widget.RecipeWidgetUpdateService;
 
 import java.util.List;
@@ -64,6 +66,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeAdap
         recipeAdapterViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                SessionManager.setIntegerSharedPrefs(SessionManager.RECIPE_ID, recipe.getId());
 
                 RecipeWidgetUpdateService.startActionUpdateRecipe(mContext, recipe);
 
