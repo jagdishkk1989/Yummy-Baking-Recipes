@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 
+import com.jagdish.bakingapp.R;
 import com.jagdish.bakingapp.data.Ingredient;
 import com.jagdish.bakingapp.data.Recipe;
 import com.jagdish.bakingapp.db.AppDatabase;
@@ -47,6 +48,9 @@ public class RecipeWidgetUpdateService extends IntentService {
 
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
         int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, RecipeIngredientProvider.class));
+
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_listview_ingredients);
+
         RecipeIngredientProvider.updateAppWidget(this, appWidgetManager, appWidgetIds, mRecipe.getName(), mRecipe);
     }
 

@@ -3,6 +3,7 @@ package com.jagdish.bakingapp.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +14,20 @@ import com.jagdish.bakingapp.RecipeDetailActivity;
 import com.jagdish.bakingapp.StepNavigatorCallBack;
 import com.jagdish.bakingapp.adapter.StepAdapter;
 import com.jagdish.bakingapp.data.Recipe;
+import com.jagdish.bakingapp.data.Step;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import moe.feng.common.stepperview.VerticalStepperView;
 
-public class RecipeStepFragment extends BaseFragment {
+public class RecipeStepFragment extends Fragment {
 
     private static final String TAG = RecipeStepFragment.class.getName();
+    private static final String BUNDLE_STEP_POS = "currentStepPos";
+
+    private static final String KEY_RECIPE_DETAIL = "recipeDetail";
+    private static final String KEY_SELECT_STEP_POS = "currentStepPos";
+
 
     private View rootView;
 
@@ -33,9 +40,20 @@ public class RecipeStepFragment extends BaseFragment {
     private Recipe mRecipe = null;
     private RecipeDetailActivity mParentActivity;
     private int currentStepPos = 0;
-    private boolean isVideoPlaying = false;
     private boolean isTablet = false;
     private boolean isLandscape = false;
+
+    private OnStepSelectedListener onStepSelectedListener;
+
+
+    public static RecipeStepFragment newInstance(Recipe recipe, int position) {
+        RecipeStepFragment fragment = new RecipeStepFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(KEY_RECIPE_DETAIL, recipe);
+        bundle.putInt(KEY_SELECT_STEP_POS, position);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,21 +65,31 @@ public class RecipeStepFragment extends BaseFragment {
         } else {
             isTablet = false;
         }
+
+        if (getActivity() != null) {
+            mParentActivity = (RecipeDetailActivity) getActivity();
+            if (getArguments() != null) {
+                Bundle bundle = getArguments();
+                mRecipe = bundle.getParcelable(KEY_RECIPE_DETAIL);
+                currentStepPos = bundle.getInt(KEY_SELECT_STEP_POS);
+            }
+        }
+
+
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        if (getActivity() != null) {
-            mParentActivity = (RecipeDetailActivity) getActivity();
-            if (getArguments() != null) {
-                Bundle bundle = getArguments();
-                mRecipe = bundle.getParcelable("recipeDetail");
-                currentStepPos = bundle.getInt("currentStepPos");
-                isVideoPlaying = bundle.getBoolean("isVideoPlaying");
-            }
+        if (context instanceof OnStepSelectedListener) {
+            onStepSelectedListener = (OnStepSelectedListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnStepSelectedListener");
         }
+
+
     }
 
     @Override
@@ -82,14 +110,24 @@ public class RecipeStepFragment extends BaseFragment {
 
             setStepsAdapter();
 
+            if (savedInstanceState != null) {
+                currentStepPos = savedInstanceState.getInt(BUNDLE_STEP_POS);
+            }
+
+
             // active previous step
             vertical_stepper_view.setCurrentStep(currentStepPos);
-
-            if (isVideoPlaying) {
-                stepNavigatorCallBack.onClickWatch();
+            if (onStepSelectedListener != null && isTablet) {
+                Step step = mRecipe.getSteps().get(currentStepPos);
+                onStepSelectedListener.onSelectedStep(currentStepPos, step);
             }
         }
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     private void setStepsAdapter() {
@@ -105,33 +143,33 @@ public class RecipeStepFragment extends BaseFragment {
             currentStepPos = current + 1;
             mParentActivity.setCurrentStepPos(currentStepPos);
             vertical_stepper_view.setCurrentStep(current + 1);
-            if (isTablet && isLandscape) {
-                goToVideoFragment(current + 1);
+
+            if (isTablet) {
+                onStepSelectedListener.onSelectedStep(current + 1, mRecipe.getSteps().get(current + 1));
             }
         }
 
         @Override
         public void onClickWatch() {
             int pos = vertical_stepper_view.getCurrentStep();
-            mParentActivity.setIsVideoPlaying(true);
-            goToVideoFragment(pos);
+            mParentActivity.setCurrentStepPos(pos);
+            onStepSelectedListener.onSelectedStep(pos, mRecipe.getSteps().get(pos));
         }
     };
 
-    private void goToVideoFragment(int position) {
 
-        StepVideoFragment stepVideoFragment = new StepVideoFragment();
-        Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList("stepList", mRecipe.getSteps());
-        bundle.putInt("currentPos", position);
-        stepVideoFragment.setArguments(bundle);
-
-        if (isTablet && isLandscape)
-            BaseFragment.replaceFragment(mParentActivity, R.id.containerVideo, stepVideoFragment, "StepVideoFragment");
-        else {
-            BaseFragment.replaceFragment(mParentActivity, R.id.containerStep, stepVideoFragment, "StepVideoFragment");
-        }
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(BUNDLE_STEP_POS, currentStepPos);
     }
 
+    public void updateCurrentPosition(int position) {
+        this.currentStepPos = position;
+        vertical_stepper_view.setCurrentStep(position);
+    }
 
+    public interface OnStepSelectedListener {
+        void onSelectedStep(int index, Step step);
+    }
 }

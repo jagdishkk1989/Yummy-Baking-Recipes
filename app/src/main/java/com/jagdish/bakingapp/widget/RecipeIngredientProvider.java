@@ -22,8 +22,8 @@ public class RecipeIngredientProvider extends AppWidgetProvider {
                                        Recipe recipe) {
 
         mRecipeName = recipeName;
-
         mRecipe = recipe;
+
         Intent intent = new Intent(context, RecipeDetailActivity.class);
         intent.putExtra("recipe", recipe);
 
@@ -32,7 +32,6 @@ public class RecipeIngredientProvider extends AppWidgetProvider {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipe_ingredient_provider);
 
         views.setTextViewText(R.id.widget_recipe_name, recipeName);
-      //  views.setTextViewText(R.id.widget_ingredients, ingredients);
 
         views.setRemoteAdapter(R.id.widget_listview_ingredients,
                 RecipeRemoteViewsService.getIntent(context));

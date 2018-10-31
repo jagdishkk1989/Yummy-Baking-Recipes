@@ -1,107 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/step_video_fragment"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/white"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:id="@+id/player_container"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:visibility="visible">
-
-        <com.google.android.exoplayer2.ui.SimpleExoPlayerView
-            android:id="@+id/exoplayer_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/no_video_container"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:padding="@dimen/padding_common"
-        android:visibility="gone">
-
-        <ImageView
-            android:id="@+id/no_video_image_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/video_not_available"
-            android:src="@drawable/ic_no_video" />
-
-        <TextView
-            android:id="@+id/no_vide_text_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/no_video_image_view"
-            android:gravity="center"
-            android:text="@string/video_not_available" />
-    </RelativeLayout>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1">
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/player_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="2dp"
+            android:layout_weight="2"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+                android:id="@+id/exoplayer_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                app:fastforward_increment="1000"
+                app:rewind_increment="1000"
+                app:resize_mode="fixed_width"/>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/no_video_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_weight="1"
+            android:padding="@dimen/padding_common"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/no_video_image_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/video_not_available"
+                android:src="@drawable/ic_no_video" />
 
             <TextView
-                android:id="@+id/step_short_desc_text_view"
-                style="@style/Base.TextAppearance.AppCompat.Body1"
+                android:id="@+id/no_vide_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/no_video_image_view"
+                android:gravity="center"
+                android:textColor="@android:color/darker_gray"
+                android:text="@string/video_not_available" />
+        </RelativeLayout>
+
+        <ScrollView
+            android:id="@+id/scollViewDescPanel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/step_short_desc_text_view"
+                    style="@style/Base.TextAppearance.AppCompat.Body1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/label_margin_common"
+                    android:layout_marginStart="@dimen/label_margin_common"
+                    android:layout_marginTop="@dimen/label_margin_common"
+                    android:text=""
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/step_desc_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/label_margin_common"
+                    android:layout_marginStart="@dimen/label_margin_common"
+                    android:layout_marginTop="@dimen/label_margin_common"
+                    android:layout_weight="2"
+                    android:text=""
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1" />
+            </LinearLayout>
+        </ScrollView>
+
+        <RelativeLayout
+            android:id="@+id/buttonPanel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/label_margin_common">
+
+            <Button
+                android:id="@+id/btnPrev"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/label_margin_common"
-                android:layout_marginStart="@dimen/label_margin_common"
-                android:layout_marginTop="@dimen/label_margin_common"
-                android:text=""
-                android:textStyle="bold" />
+                android:background="@color/colorPrimary"
+                android:text="@string/previous"
+                android:textAllCaps="false"
+                android:textColor="@color/white" />
 
-            <TextView
-                android:id="@+id/step_desc_text_view"
+
+            <Button
+                android:id="@+id/btnNext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/label_margin_common"
-                android:layout_marginStart="@dimen/label_margin_common"
-                android:layout_marginTop="@dimen/label_margin_common"
-                android:layout_weight="2"
-                android:text=""
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1" />
-        </LinearLayout>
-    </ScrollView>
+                android:layout_alignParentRight="true"
+                android:background="@color/colorPrimary"
+                android:text="@string/next"
+                android:textAllCaps="false"
+                android:textColor="@color/white" />
 
-    <RelativeLayout
-        android:id="@+id/buttonPanel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/label_margin_common">
-
-        <Button
-            android:id="@+id/btnPrev"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:text="@string/previous"
-            android:textAllCaps="false"
-            android:textColor="@color/white" />
-
-
-        <Button
-            android:id="@+id/btnNext"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:background="@color/colorPrimary"
-            android:text="@string/next"
-            android:textAllCaps="false"
-            android:textColor="@color/white" />
-
-    </RelativeLayout>
-</LinearLayout>
-
+        </RelativeLayout>
+    </LinearLayout>
+</FrameLayout>

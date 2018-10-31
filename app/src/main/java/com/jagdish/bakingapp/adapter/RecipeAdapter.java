@@ -1,5 +1,7 @@
 package com.jagdish.bakingapp.adapter;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -14,9 +16,12 @@ import com.jagdish.bakingapp.RecipeDetailActivity;
 import com.jagdish.bakingapp.data.Recipe;
 import com.jagdish.bakingapp.db.AppDatabase;
 import com.jagdish.bakingapp.utility.SessionManager;
+import com.jagdish.bakingapp.widget.RecipeIngredientProvider;
 import com.jagdish.bakingapp.widget.RecipeWidgetUpdateService;
 
 import java.util.List;
+
+import static com.jagdish.bakingapp.BakingApplication.getContext;
 
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeAdapterViewHolder> {
@@ -69,7 +74,14 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeAdap
 
                 SessionManager.setIntegerSharedPrefs(SessionManager.RECIPE_ID, recipe.getId());
 
-                RecipeWidgetUpdateService.startActionUpdateRecipe(mContext, recipe);
+               RecipeWidgetUpdateService.startActionUpdateRecipe(mContext, recipe);
+//
+//                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getContext());
+//                int[] appWidgetIds = appWidgetManager.getAppWidgetIds(
+//                        new ComponentName(getContext(), RecipeIngredientProvider.class));
+//                appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_listview_ingredients);
+//                RecipeIngredientProvider.updateAppWidget(mContext, appWidgetManager, appWidgetIds,recipe.getName(),
+//                        recipe);
 
                 Intent intent = new Intent(mContext, RecipeDetailActivity.class);
                 intent.putExtra("recipe", recipe);

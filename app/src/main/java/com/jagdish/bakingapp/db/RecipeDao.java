@@ -23,7 +23,7 @@ public abstract class RecipeDao {
     public abstract void insertSteps(List<Step> steps);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public abstract void _insertRecipe(Recipe recipe);
+    public abstract void insertRecipe(Recipe recipe);
 
 
     public void insertOrReplaceRecipe(Recipe recipe) {
@@ -32,6 +32,10 @@ public abstract class RecipeDao {
         for (Ingredient ingredient : ingredients) {
             ingredient.setRecipeId(recipe.getId());
         }
+        // check if ingredients already exist then delete older one
+        deleteIngredientsByRecipeId(recipe.getId());
+
+        // insert values now
         insertIngredients(ingredients);
 
         List<Step> steps = recipe.getSteps();
@@ -40,11 +44,16 @@ public abstract class RecipeDao {
         }
         insertSteps(steps);
 
-        _insertRecipe(recipe);
+        insertRecipe(recipe);
     }
 
     @Transaction
     @Query("SELECT * FROM Recipe WHERE id = :id")
     public abstract RecipeFilter getRecipeById(int id);
 
+    @Query("DELETE FROM Ingredient WHERE recipeId = :recipeId")
+    public abstract int deleteIngredientsByRecipeId(final int recipeId);
+
+//    @Query("DELETE FROM Step WHERE recipeId = :recipeId")
+//    public abstract int deleteStepsByRecipeId(final int recipeId);
 }

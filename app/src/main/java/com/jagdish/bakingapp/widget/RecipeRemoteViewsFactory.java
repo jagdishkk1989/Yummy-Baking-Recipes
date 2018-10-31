@@ -1,7 +1,5 @@
 package com.jagdish.bakingapp.widget;
 
-import android.arch.persistence.room.Room;
-import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.AdapterView;
@@ -20,6 +18,7 @@ import java.util.Locale;
 
 public class RecipeRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
+    private static final String TAG = RecipeRemoteViewsFactory.class.getName();
     private Context context;
     private List<String> ingredients;
 
