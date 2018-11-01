@@ -267,7 +267,6 @@ public class StepVideoFragment extends Fragment {
             player_container.setVisibility(View.GONE);
             no_video_container.setVisibility(View.VISIBLE);
         }
-
     }
 
 
@@ -289,6 +288,7 @@ public class StepVideoFragment extends Fragment {
         boolean resetPosition = false;
         if (isTablet) {
             resetPosition = true;
+            mExoPlayer.setPlayWhenReady(playWhenReady);
         } else {
             if (previousPosition == 0) {
                 resetPosition = true;
