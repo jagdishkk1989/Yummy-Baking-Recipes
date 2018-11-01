@@ -5,5 +5,5 @@ This application is developed for Udacity Android Developer Nanodegree Project #
 Requirements
 
     Android Studio 3.1.4
-    Compile Sdk Version: 27
+    Compile Sdk Version: 23
     Minimum Android Version: 17
