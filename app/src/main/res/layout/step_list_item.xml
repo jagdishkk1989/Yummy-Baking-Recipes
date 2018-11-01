@@ -28,10 +28,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/step_textview"
-        android:layout_marginLeft="@dimen/button_margin_left"
-        android:layout_toRightOf="@+id/btn_watch"
+        android:layout_marginStart="@dimen/button_margin_left"
+        android:layout_toEndOf="@+id/btn_watch"
         android:background="@color/colorPrimary"
-        android:text="Next"
+        android:text="@string/next"
         android:textColor="@color/white" />
 
 </RelativeLayout>

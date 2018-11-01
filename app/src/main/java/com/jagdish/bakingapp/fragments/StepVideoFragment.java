@@ -74,13 +74,13 @@ public class StepVideoFragment extends Fragment {
     View scollViewDescPanel;
 
 
-    SimpleExoPlayer mExoPlayer;
-    ArrayList<Step> mStepList = null;
-    Step mStep = null;
-    int currentIndex;
+    private SimpleExoPlayer mExoPlayer;
+    private ArrayList<Step> mStepList = null;
+    private Step mStep = null;
+    private int currentIndex;
 
-    RecipeDetailActivity mParentActivity;
-    View rootView;
+    private RecipeDetailActivity mParentActivity;
+    private View rootView;
 
     private boolean isTablet;
     private boolean isLandscape;
@@ -287,9 +287,13 @@ public class StepVideoFragment extends Fragment {
                 getContext(), userAgent), new DefaultExtractorsFactory(), null, null);
 
         boolean resetPosition = false;
-        if (previousPosition == 0) {
+        if (isTablet) {
             resetPosition = true;
-            mExoPlayer.setPlayWhenReady(playWhenReady);
+        } else {
+            if (previousPosition == 0) {
+                resetPosition = true;
+                mExoPlayer.setPlayWhenReady(playWhenReady);
+            }
         }
         mExoPlayer.prepare(mediaSource, resetPosition, false);
     }

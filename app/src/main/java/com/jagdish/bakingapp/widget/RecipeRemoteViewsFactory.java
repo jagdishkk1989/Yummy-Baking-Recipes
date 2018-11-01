@@ -45,7 +45,7 @@ public class RecipeRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
 
             if (recipeFilter != null) {
                 for (Ingredient ingredient : recipeFilter.ingredients) {
-                    ingredients.add(String.format(Locale.getDefault(), "%.1f %s %s",
+                    ingredients.add("\u25CF "+String.format(Locale.getDefault(), "%.1f %s %s",
                             ingredient.getQuantity(), ingredient.getMeasure(), ingredient.getName()));
                 }
             }
