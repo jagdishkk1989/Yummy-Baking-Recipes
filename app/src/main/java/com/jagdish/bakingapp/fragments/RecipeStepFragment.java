@@ -164,11 +164,6 @@ public class RecipeStepFragment extends Fragment {
         outState.putInt(BUNDLE_STEP_POS, currentStepPos);
     }
 
-    public void updateCurrentPosition(int position) {
-        this.currentStepPos = position;
-        vertical_stepper_view.setCurrentStep(position);
-    }
-
     public interface OnStepSelectedListener {
         void onSelectedStep(int index, Step step);
     }
